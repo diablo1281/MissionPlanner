@@ -27,6 +27,40 @@ namespace MissionPlanner
 {
     public partial class MainV2 : Form
     {
+        //Log timer
+        private System.Timers.Timer logTimer;
+        private string logfile_name;
+        private bool restart_connection;
+
+        public void InitLogTimer()
+        {
+            logTimer = new System.Timers.Timer();
+            logTimer.Elapsed += new System.Timers.ElapsedEventHandler(logTimer_Tick);
+            logTimer.Interval = 1000;
+            logTimer.Start();
+            logfile_name = DateTime.Now.ToString("dd.MM.yyyy") + "_" + DateTime.Now.ToString("HH.mm.ss") + ".log";
+            restart_connection = false;
+
+
+            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\SAE Flight Logs\"))
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\SAE Flight Logs\");
+        }
+
+        private void logTimer_Tick(object sender, EventArgs e)
+        {
+            if (comPort.BaseStream.IsOpen)
+            {
+                if (restart_connection == true)
+                {
+                    logfile_name = DateTime.Now.ToString("dd.MM.yyyy") + "_" + DateTime.Now.ToString("HH.mm.ss") + ".log";
+                    restart_connection = false;
+                }
+                File.AppendAllText(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\SAE Flight Logs\" + logfile_name, DateTime.Now.ToString() + " Altitude: " + GCSViews.FlightData.myhud.alt.ToString("N2") + " Servo: " + MainV2.comPort.MAV.cs.ch9out.ToString("N2") + Environment.NewLine);
+            }
+            else
+                restart_connection = true;
+        }
+
         private static readonly ILog log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -464,6 +498,7 @@ namespace MissionPlanner
         public MainV2()
         {
             log.Info("Mainv2 ctor");
+            InitLogTimer();
 
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 

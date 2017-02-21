@@ -328,6 +328,23 @@ namespace MissionPlanner.GCSViews
 
             MainV2.comPort.ParamListChanged += FlightData_ParentChanged;
 
+            foreach (System.Reflection.PropertyInfo prop in typeof(Color).GetProperties())
+                if (prop.PropertyType.FullName == "System.Drawing.Color")
+                    SAE_crosshair_color_box.Items.Add(prop.Name);
+
+            SAE_crosshair_color_box.Text = System.Configuration.ConfigurationManager.AppSettings["CrosshairColor"];
+            hud1.crosshair_color = SAE_crosshair_color_box.Text;
+
+            SAE_crosshair_width.Value = int.Parse(System.Configuration.ConfigurationManager.AppSettings["CrosshairWidth"]);
+            hud1.crosshair_width = Convert.ToInt32(SAE_crosshair_width.Value);
+
+            SAE_crosshair_center_offset.Value = decimal.Parse(System.Configuration.ConfigurationManager.AppSettings["CrosshairOffset"]);
+            hud1.crosshair_offset = Convert.ToDouble(SAE_crosshair_center_offset.Value);
+
+            SAE_crosshair_rect.Value = decimal.Parse(System.Configuration.ConfigurationManager.AppSettings["CrosshairRect"]);
+            hud1.crosshair_rect = Convert.ToDouble(SAE_crosshair_rect.Value);
+
+            SAE_drop_servo.Value = int.Parse(System.Configuration.ConfigurationManager.AppSettings["DropServo"]);
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
@@ -802,6 +819,76 @@ namespace MissionPlanner.GCSViews
                     LogPlayBackSpeed *= 2;
 
                 updateLogPlayPosition();
+            }
+            else if (keyData == (Keys.Control | Keys.Q))
+            {
+                try
+                {
+                    if (MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO, Convert.ToInt32(SAE_drop_servo.Value), int.Parse(SAE_servo_max.Text), 0, 0,
+                        0, 0, 0))
+                    {
+                        SAE_servo_max.BackColor = Color.IndianRed;
+                        SAE_servo_mid.BackColor = Color.DarkGray;
+                        SAE_servo_min.BackColor = Color.DarkGray;
+                    }
+                    else
+                    {
+                        CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CustomMessageBox.Show(Strings.CommandFailed + ex.ToString(), Strings.ERROR);
+                }
+
+                return true;
+            }
+            else if (keyData == (Keys.Control | Keys.W))
+            {
+                try
+                {
+                    if (MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO, Convert.ToInt32(SAE_drop_servo.Value), int.Parse(SAE_servo_mid.Text), 0, 0,
+                        0, 0, 0))
+                    {
+                        Console.WriteLine("HHHHHHHHHHUUUUUUUUUUUUUUUUUUUJJJJJJJJJJJJJJJJJ Color: " + SAE_servo_max.BackColor.Name);
+                        SAE_servo_max.BackColor = Color.DarkGray;
+                        SAE_servo_mid.BackColor = Color.IndianRed;
+                        SAE_servo_min.BackColor = Color.DarkGray;
+                    }
+                    else
+                    {
+                        CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CustomMessageBox.Show(Strings.CommandFailed + ex.ToString(), Strings.ERROR);
+                }
+
+                return true;
+            }
+            else if (keyData == (Keys.Control | Keys.E))
+            {
+                try
+                {
+                    if (MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO, Convert.ToInt32(SAE_drop_servo.Value), int.Parse(SAE_servo_min.Text), 0, 0,
+                        0, 0, 0))
+                    {
+                        SAE_servo_max.BackColor = Color.DarkGray;
+                        SAE_servo_mid.BackColor = Color.DarkGray;
+                        SAE_servo_min.BackColor = Color.IndianRed;
+                    }
+                    else
+                    {
+                        CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CustomMessageBox.Show(Strings.CommandFailed + ex.ToString(), Strings.ERROR);
+                }
+
+                return true;
             }
 
             return false;
@@ -4485,6 +4572,45 @@ namespace MissionPlanner.GCSViews
             this.LogInfo("GetColor() " + col);
 
             return col;
+        }
+
+        private void SAE_crosshair_color_box_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            hud1.crosshair_color = SAE_crosshair_color_box.Text;
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["CrosshairColor"].Value = SAE_crosshair_color_box.Text;
+            config.Save();
+        }
+
+        private void SAE_crosshair_width_ValueChanged(object sender, EventArgs e)
+        {
+            hud1.crosshair_width = Convert.ToInt32(SAE_crosshair_width.Value);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["CrosshairWidth"].Value = SAE_crosshair_width.Value.ToString();
+            config.Save();
+        }
+
+        private void SAE_crosshair_center_offset_ValueChanged(object sender, EventArgs e)
+        {
+            hud1.crosshair_offset = Convert.ToDouble(SAE_crosshair_center_offset.Value);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["CrosshairOffset"].Value = SAE_crosshair_center_offset.Value.ToString();
+            config.Save();
+        }
+        
+        private void SAE_crosshair_rect_ValueChanged(object sender, EventArgs e)
+        {
+            hud1.crosshair_rect = Convert.ToDouble(SAE_crosshair_rect.Value);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["CrosshairRect"].Value = SAE_crosshair_rect.Value.ToString();
+            config.Save();
+        }
+
+        private void SAE_drop_servo_ValueChanged(object sender, EventArgs e)
+        {
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["DropServo"].Value = SAE_drop_servo.Value.ToString();
+            config.Save();
         }
     }
 }

@@ -66,7 +66,6 @@
             this.myButton2 = new MissionPlanner.Controls.MyButton();
             this.myButton3 = new MissionPlanner.Controls.MyButton();
             this.tabPagePreFlight = new System.Windows.Forms.TabPage();
-            this.checkListControl1 = new MissionPlanner.Controls.PreFlight.CheckListControl();
             this.tabGauges = new System.Windows.Forms.TabPage();
             this.Gvspeed = new AGaugeApp.AGauge();
             this.bindingSourceGaugesTab = new System.Windows.Forms.BindingSource(this.components);
@@ -121,6 +120,19 @@
             this.BUT_select_script = new MissionPlanner.Controls.MyButton();
             this.tabPagemessages = new System.Windows.Forms.TabPage();
             this.txt_messagebox = new System.Windows.Forms.TextBox();
+            this.tabPageSAE = new System.Windows.Forms.TabPage();
+            this.SAE_drop_servo = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.SAE_crosshair_rect = new System.Windows.Forms.NumericUpDown();
+            this.SAE_crosshair_center_offset = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.SAE_crosshair_width = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.SAE_crosshair_color_box = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.tableMap = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.zg1 = new ZedGraph.ZedGraphControl();
@@ -165,6 +177,12 @@
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.Messagetabtimer = new System.Windows.Forms.Timer(this.components);
             this.bindingSourceStatusTab = new System.Windows.Forms.BindingSource(this.components);
+            this.SAE_servo_max = new System.Windows.Forms.TextBox();
+            this.SAE_servo_mid = new System.Windows.Forms.TextBox();
+            this.SAE_servo_min = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.MainH)).BeginInit();
             this.MainH.Panel1.SuspendLayout();
             this.MainH.Panel2.SuspendLayout();
@@ -183,7 +201,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceQuickTab)).BeginInit();
             this.tabActions.SuspendLayout();
             this.tabActionsSimple.SuspendLayout();
-            this.tabPagePreFlight.SuspendLayout();
             this.tabGauges.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceGaugesTab)).BeginInit();
             this.tabServo.SuspendLayout();
@@ -195,6 +212,11 @@
             this.tablogbrowse.SuspendLayout();
             this.tabScripts.SuspendLayout();
             this.tabPagemessages.SuspendLayout();
+            this.tabPageSAE.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_drop_servo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_crosshair_rect)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_crosshair_center_offset)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_crosshair_width)).BeginInit();
             this.tableMap.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -243,10 +265,15 @@
             this.hud1.alt = 0F;
             this.hud1.BackColor = System.Drawing.Color.Black;
             this.hud1.batterylevel = 0F;
+            this.hud1.batteryon = false;
             this.hud1.batteryremaining = 0F;
             this.hud1.bgimage = null;
             this.hud1.connected = false;
             this.hud1.ContextMenuStrip = this.contextMenuStripHud;
+            this.hud1.crosshair_color = null;
+            this.hud1.crosshair_offset = 0D;
+            this.hud1.crosshair_rect = 0D;
+            this.hud1.crosshair_width = 0;
             this.hud1.current = 0F;
             this.hud1.DataBindings.Add(new System.Windows.Forms.Binding("airspeed", this.bindingSourceHud, "airspeed", true));
             this.hud1.DataBindings.Add(new System.Windows.Forms.Binding("alt", this.bindingSourceHud, "alt", true));
@@ -286,6 +313,15 @@
             this.hud1.DataBindings.Add(new System.Windows.Forms.Binding("wpno", this.bindingSourceHud, "wpno", true));
             this.hud1.DataBindings.Add(new System.Windows.Forms.Binding("xtrack_error", this.bindingSourceHud, "xtrack_error", true));
             this.hud1.datetime = new System.DateTime(((long)(0)));
+            this.hud1.displayalt = false;
+            this.hud1.displayconninfo = false;
+            this.hud1.displayekf = false;
+            this.hud1.displaygps = false;
+            this.hud1.displayheading = false;
+            this.hud1.displayrollpitch = false;
+            this.hud1.displayspeed = false;
+            this.hud1.displayvibe = false;
+            this.hud1.displayxtrack = false;
             this.hud1.disttowp = 0F;
             resources.ApplyResources(this.hud1, "hud1");
             this.hud1.ekfstatus = 0F;
@@ -417,6 +453,7 @@
             this.tabControlactions.Controls.Add(this.tablogbrowse);
             this.tabControlactions.Controls.Add(this.tabScripts);
             this.tabControlactions.Controls.Add(this.tabPagemessages);
+            this.tabControlactions.Controls.Add(this.tabPageSAE);
             resources.ApplyResources(this.tabControlactions, "tabControlactions");
             this.tabControlactions.Name = "tabControlactions";
             this.tabControlactions.SelectedIndex = 0;
@@ -881,15 +918,9 @@
             // 
             // tabPagePreFlight
             // 
-            this.tabPagePreFlight.Controls.Add(this.checkListControl1);
             resources.ApplyResources(this.tabPagePreFlight, "tabPagePreFlight");
             this.tabPagePreFlight.Name = "tabPagePreFlight";
             this.tabPagePreFlight.UseVisualStyleBackColor = true;
-            // 
-            // checkListControl1
-            // 
-            resources.ApplyResources(this.checkListControl1, "checkListControl1");
-            this.checkListControl1.Name = "checkListControl1";
             // 
             // tabGauges
             // 
@@ -1765,6 +1796,153 @@
             resources.ApplyResources(this.txt_messagebox, "txt_messagebox");
             this.txt_messagebox.Name = "txt_messagebox";
             // 
+            // tabPageSAE
+            // 
+            this.tabPageSAE.Controls.Add(this.label16);
+            this.tabPageSAE.Controls.Add(this.label15);
+            this.tabPageSAE.Controls.Add(this.label14);
+            this.tabPageSAE.Controls.Add(this.SAE_servo_min);
+            this.tabPageSAE.Controls.Add(this.SAE_servo_mid);
+            this.tabPageSAE.Controls.Add(this.SAE_servo_max);
+            this.tabPageSAE.Controls.Add(this.SAE_drop_servo);
+            this.tabPageSAE.Controls.Add(this.label13);
+            this.tabPageSAE.Controls.Add(this.label12);
+            this.tabPageSAE.Controls.Add(this.SAE_crosshair_rect);
+            this.tabPageSAE.Controls.Add(this.SAE_crosshair_center_offset);
+            this.tabPageSAE.Controls.Add(this.label11);
+            this.tabPageSAE.Controls.Add(this.label10);
+            this.tabPageSAE.Controls.Add(this.SAE_crosshair_width);
+            this.tabPageSAE.Controls.Add(this.label9);
+            this.tabPageSAE.Controls.Add(this.SAE_crosshair_color_box);
+            this.tabPageSAE.Controls.Add(this.label8);
+            this.tabPageSAE.Controls.Add(this.label7);
+            resources.ApplyResources(this.tabPageSAE, "tabPageSAE");
+            this.tabPageSAE.Name = "tabPageSAE";
+            this.tabPageSAE.UseVisualStyleBackColor = true;
+            // 
+            // SAE_drop_servo
+            // 
+            resources.ApplyResources(this.SAE_drop_servo, "SAE_drop_servo");
+            this.SAE_drop_servo.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.SAE_drop_servo.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.SAE_drop_servo.Name = "SAE_drop_servo";
+            this.SAE_drop_servo.Value = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.SAE_drop_servo.ValueChanged += new System.EventHandler(this.SAE_drop_servo_ValueChanged);
+            // 
+            // label13
+            // 
+            resources.ApplyResources(this.label13, "label13");
+            this.label13.Name = "label13";
+            // 
+            // label12
+            // 
+            resources.ApplyResources(this.label12, "label12");
+            this.label12.Name = "label12";
+            // 
+            // SAE_crosshair_rect
+            // 
+            this.SAE_crosshair_rect.DecimalPlaces = 1;
+            this.SAE_crosshair_rect.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            resources.ApplyResources(this.SAE_crosshair_rect, "SAE_crosshair_rect");
+            this.SAE_crosshair_rect.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.SAE_crosshair_rect.Name = "SAE_crosshair_rect";
+            this.SAE_crosshair_rect.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            65536});
+            this.SAE_crosshair_rect.ValueChanged += new System.EventHandler(this.SAE_crosshair_rect_ValueChanged);
+            // 
+            // SAE_crosshair_center_offset
+            // 
+            this.SAE_crosshair_center_offset.DecimalPlaces = 2;
+            this.SAE_crosshair_center_offset.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            resources.ApplyResources(this.SAE_crosshair_center_offset, "SAE_crosshair_center_offset");
+            this.SAE_crosshair_center_offset.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.SAE_crosshair_center_offset.Name = "SAE_crosshair_center_offset";
+            this.SAE_crosshair_center_offset.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.SAE_crosshair_center_offset.ValueChanged += new System.EventHandler(this.SAE_crosshair_center_offset_ValueChanged);
+            // 
+            // label11
+            // 
+            resources.ApplyResources(this.label11, "label11");
+            this.label11.Name = "label11";
+            // 
+            // label10
+            // 
+            resources.ApplyResources(this.label10, "label10");
+            this.label10.Name = "label10";
+            // 
+            // SAE_crosshair_width
+            // 
+            resources.ApplyResources(this.SAE_crosshair_width, "SAE_crosshair_width");
+            this.SAE_crosshair_width.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.SAE_crosshair_width.Name = "SAE_crosshair_width";
+            this.SAE_crosshair_width.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.SAE_crosshair_width.ValueChanged += new System.EventHandler(this.SAE_crosshair_width_ValueChanged);
+            // 
+            // label9
+            // 
+            resources.ApplyResources(this.label9, "label9");
+            this.label9.Name = "label9";
+            // 
+            // SAE_crosshair_color_box
+            // 
+            this.SAE_crosshair_color_box.FormattingEnabled = true;
+            resources.ApplyResources(this.SAE_crosshair_color_box, "SAE_crosshair_color_box");
+            this.SAE_crosshair_color_box.Name = "SAE_crosshair_color_box";
+            this.SAE_crosshair_color_box.SelectedIndexChanged += new System.EventHandler(this.SAE_crosshair_color_box_SelectedIndexChanged);
+            // 
+            // label8
+            // 
+            resources.ApplyResources(this.label8, "label8");
+            this.label8.Name = "label8";
+            // 
+            // label7
+            // 
+            resources.ApplyResources(this.label7, "label7");
+            this.label7.Name = "label7";
+            // 
             // tableMap
             // 
             resources.ApplyResources(this.tableMap, "tableMap");
@@ -2156,6 +2334,36 @@
             // 
             this.bindingSourceStatusTab.DataSource = typeof(MissionPlanner.CurrentState);
             // 
+            // SAE_servo_max
+            // 
+            resources.ApplyResources(this.SAE_servo_max, "SAE_servo_max");
+            this.SAE_servo_max.Name = "SAE_servo_max";
+            // 
+            // SAE_servo_mid
+            // 
+            resources.ApplyResources(this.SAE_servo_mid, "SAE_servo_mid");
+            this.SAE_servo_mid.Name = "SAE_servo_mid";
+            // 
+            // SAE_servo_min
+            // 
+            resources.ApplyResources(this.SAE_servo_min, "SAE_servo_min");
+            this.SAE_servo_min.Name = "SAE_servo_min";
+            // 
+            // label14
+            // 
+            resources.ApplyResources(this.label14, "label14");
+            this.label14.Name = "label14";
+            // 
+            // label15
+            // 
+            resources.ApplyResources(this.label15, "label15");
+            this.label15.Name = "label15";
+            // 
+            // label16
+            // 
+            resources.ApplyResources(this.label16, "label16");
+            this.label16.Name = "label16";
+            // 
             // FlightData
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -2185,7 +2393,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceQuickTab)).EndInit();
             this.tabActions.ResumeLayout(false);
             this.tabActionsSimple.ResumeLayout(false);
-            this.tabPagePreFlight.ResumeLayout(false);
             this.tabGauges.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceGaugesTab)).EndInit();
             this.tabServo.ResumeLayout(false);
@@ -2201,6 +2408,12 @@
             this.tabScripts.PerformLayout();
             this.tabPagemessages.ResumeLayout(false);
             this.tabPagemessages.PerformLayout();
+            this.tabPageSAE.ResumeLayout(false);
+            this.tabPageSAE.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_drop_servo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_crosshair_rect)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_crosshair_center_offset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_crosshair_width)).EndInit();
             this.tableMap.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -2376,5 +2589,24 @@
         private System.Windows.Forms.ToolStripMenuItem altitudeAngelSettingsToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripQuickView;
         private System.Windows.Forms.ToolStripMenuItem setViewCountToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPageSAE;
+        private System.Windows.Forms.NumericUpDown SAE_crosshair_width;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox SAE_crosshair_color_box;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown SAE_crosshair_rect;
+        private System.Windows.Forms.NumericUpDown SAE_crosshair_center_offset;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.NumericUpDown SAE_drop_servo;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox SAE_servo_min;
+        private System.Windows.Forms.TextBox SAE_servo_mid;
+        private System.Windows.Forms.TextBox SAE_servo_max;
     }
 }
