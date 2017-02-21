@@ -850,7 +850,6 @@ namespace MissionPlanner.GCSViews
                     if (MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO, Convert.ToInt32(SAE_drop_servo.Value), int.Parse(SAE_servo_mid.Text), 0, 0,
                         0, 0, 0))
                     {
-                        Console.WriteLine("HHHHHHHHHHUUUUUUUUUUUUUUUUUUUJJJJJJJJJJJJJJJJJ Color: " + SAE_servo_max.BackColor.Name);
                         SAE_servo_max.BackColor = Color.DarkGray;
                         SAE_servo_mid.BackColor = Color.IndianRed;
                         SAE_servo_min.BackColor = Color.DarkGray;
