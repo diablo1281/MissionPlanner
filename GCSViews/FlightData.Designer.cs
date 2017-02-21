@@ -121,6 +121,12 @@
             this.tabPagemessages = new System.Windows.Forms.TabPage();
             this.txt_messagebox = new System.Windows.Forms.TextBox();
             this.tabPageSAE = new System.Windows.Forms.TabPage();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.SAE_servo_min = new System.Windows.Forms.TextBox();
+            this.SAE_servo_mid = new System.Windows.Forms.TextBox();
+            this.SAE_servo_max = new System.Windows.Forms.TextBox();
             this.SAE_drop_servo = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -177,12 +183,6 @@
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.Messagetabtimer = new System.Windows.Forms.Timer(this.components);
             this.bindingSourceStatusTab = new System.Windows.Forms.BindingSource(this.components);
-            this.SAE_servo_max = new System.Windows.Forms.TextBox();
-            this.SAE_servo_mid = new System.Windows.Forms.TextBox();
-            this.SAE_servo_min = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.MainH)).BeginInit();
             this.MainH.Panel1.SuspendLayout();
             this.MainH.Panel2.SuspendLayout();
@@ -1820,6 +1820,39 @@
             this.tabPageSAE.Name = "tabPageSAE";
             this.tabPageSAE.UseVisualStyleBackColor = true;
             // 
+            // label16
+            // 
+            resources.ApplyResources(this.label16, "label16");
+            this.label16.Name = "label16";
+            // 
+            // label15
+            // 
+            resources.ApplyResources(this.label15, "label15");
+            this.label15.Name = "label15";
+            // 
+            // label14
+            // 
+            resources.ApplyResources(this.label14, "label14");
+            this.label14.Name = "label14";
+            // 
+            // SAE_servo_min
+            // 
+            resources.ApplyResources(this.SAE_servo_min, "SAE_servo_min");
+            this.SAE_servo_min.Name = "SAE_servo_min";
+            this.SAE_servo_min.TextChanged += new System.EventHandler(this.SAE_servo_min_TextChanged);
+            // 
+            // SAE_servo_mid
+            // 
+            resources.ApplyResources(this.SAE_servo_mid, "SAE_servo_mid");
+            this.SAE_servo_mid.Name = "SAE_servo_mid";
+            this.SAE_servo_mid.TextChanged += new System.EventHandler(this.SAE_servo_mid_TextChanged);
+            // 
+            // SAE_servo_max
+            // 
+            resources.ApplyResources(this.SAE_servo_max, "SAE_servo_max");
+            this.SAE_servo_max.Name = "SAE_servo_max";
+            this.SAE_servo_max.TextChanged += new System.EventHandler(this.SAE_servo_max_TextChanged);
+            // 
             // SAE_drop_servo
             // 
             resources.ApplyResources(this.SAE_drop_servo, "SAE_drop_servo");
@@ -2117,7 +2150,7 @@
             this.windDir1.BackColor = System.Drawing.Color.Transparent;
             this.windDir1.DataBindings.Add(new System.Windows.Forms.Binding("Direction", this.bindingSource1, "wind_dir", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.windDir1.DataBindings.Add(new System.Windows.Forms.Binding("Speed", this.bindingSource1, "wind_vel", true, System.Windows.Forms.DataSourceUpdateMode.Never));
-            this.windDir1.Direction = 360D;
+            this.windDir1.Direction = 180D;
             resources.ApplyResources(this.windDir1, "windDir1");
             this.windDir1.Name = "windDir1";
             this.windDir1.Speed = 0D;
@@ -2333,36 +2366,6 @@
             // bindingSourceStatusTab
             // 
             this.bindingSourceStatusTab.DataSource = typeof(MissionPlanner.CurrentState);
-            // 
-            // SAE_servo_max
-            // 
-            resources.ApplyResources(this.SAE_servo_max, "SAE_servo_max");
-            this.SAE_servo_max.Name = "SAE_servo_max";
-            // 
-            // SAE_servo_mid
-            // 
-            resources.ApplyResources(this.SAE_servo_mid, "SAE_servo_mid");
-            this.SAE_servo_mid.Name = "SAE_servo_mid";
-            // 
-            // SAE_servo_min
-            // 
-            resources.ApplyResources(this.SAE_servo_min, "SAE_servo_min");
-            this.SAE_servo_min.Name = "SAE_servo_min";
-            // 
-            // label14
-            // 
-            resources.ApplyResources(this.label14, "label14");
-            this.label14.Name = "label14";
-            // 
-            // label15
-            // 
-            resources.ApplyResources(this.label15, "label15");
-            this.label15.Name = "label15";
-            // 
-            // label16
-            // 
-            resources.ApplyResources(this.label16, "label16");
-            this.label16.Name = "label16";
             // 
             // FlightData
             // 

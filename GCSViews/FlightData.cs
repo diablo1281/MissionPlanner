@@ -345,6 +345,10 @@ namespace MissionPlanner.GCSViews
             hud1.crosshair_rect = Convert.ToDouble(SAE_crosshair_rect.Value);
 
             SAE_drop_servo.Value = int.Parse(System.Configuration.ConfigurationManager.AppSettings["DropServo"]);
+
+            SAE_servo_max.Text = System.Configuration.ConfigurationManager.AppSettings["ServoClosed"];
+            SAE_servo_mid.Text = System.Configuration.ConfigurationManager.AppSettings["ServoMid"];
+            SAE_servo_min.Text = System.Configuration.ConfigurationManager.AppSettings["ServoOpened"];
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
@@ -4609,6 +4613,27 @@ namespace MissionPlanner.GCSViews
         {
             var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
             config.AppSettings.Settings["DropServo"].Value = SAE_drop_servo.Value.ToString();
+            config.Save();
+        }
+
+        private void SAE_servo_max_TextChanged(object sender, EventArgs e)
+        {
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["ServoClosed"].Value = SAE_servo_max.Text;
+            config.Save();
+        }
+
+        private void SAE_servo_mid_TextChanged(object sender, EventArgs e)
+        {
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["ServoMid"].Value = SAE_servo_mid.Text;
+            config.Save();
+        }
+
+        private void SAE_servo_min_TextChanged(object sender, EventArgs e)
+        {
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["ServoOpened"].Value = SAE_servo_min.Text;
             config.Save();
         }
     }
