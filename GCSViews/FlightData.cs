@@ -28,6 +28,7 @@ using Org.BouncyCastle.Asn1.X509.Qualified;
 using WebCamService;
 using ZedGraph;
 using LogAnalyzer = MissionPlanner.Utilities.LogAnalyzer;
+using System.Drawing.Imaging;
 
 // written by michael oborne
 
@@ -118,6 +119,7 @@ namespace MissionPlanner.GCSViews
         //whether or not the output console has already started
         bool outputwindowstarted;
 
+        private string LogDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\SAE Flight Logs\";
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -824,21 +826,26 @@ namespace MissionPlanner.GCSViews
 
                 updateLogPlayPosition();
             }
-            else if (keyData == (Keys.Control | Keys.Q))
+            else if (keyData == (Keys.Control | Keys.B))
             {
                 try
                 {
-                    if (MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO, Convert.ToInt32(SAE_drop_servo.Value), int.Parse(SAE_servo_max.Text), 0, 0,
+                    if (MainV2.comPort.BaseStream.IsOpen)
+                        if (MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO, Convert.ToInt32(SAE_drop_servo.Value), int.Parse(SAE_servo_max.Text), 0, 0,
                         0, 0, 0))
-                    {
-                        SAE_servo_max.BackColor = Color.IndianRed;
-                        SAE_servo_mid.BackColor = Color.DarkGray;
-                        SAE_servo_min.BackColor = Color.DarkGray;
-                    }
+                        {
+                            SAE_servo_max.BackColor = Color.IndianRed;
+                            SAE_servo_mid.BackColor = Color.DarkGray;
+                            SAE_servo_min.BackColor = Color.DarkGray;
+
+                            MakeDropLog();
+                        }
+                        else
+                        {
+                            CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
+                        }
                     else
-                    {
-                        CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
-                    }
+                        CustomMessageBox.Show("Vehicle is not connected!", Strings.ERROR);
                 }
                 catch (Exception ex)
                 {
@@ -847,21 +854,26 @@ namespace MissionPlanner.GCSViews
 
                 return true;
             }
-            else if (keyData == (Keys.Control | Keys.W))
+            else if (keyData == (Keys.Control | Keys.N))
             {
                 try
                 {
-                    if (MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO, Convert.ToInt32(SAE_drop_servo.Value), int.Parse(SAE_servo_mid.Text), 0, 0,
+                    if (MainV2.comPort.BaseStream.IsOpen)
+                        if (MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO, Convert.ToInt32(SAE_drop_servo.Value), int.Parse(SAE_servo_mid.Text), 0, 0,
                         0, 0, 0))
-                    {
-                        SAE_servo_max.BackColor = Color.DarkGray;
-                        SAE_servo_mid.BackColor = Color.IndianRed;
-                        SAE_servo_min.BackColor = Color.DarkGray;
-                    }
+                        {
+                            SAE_servo_max.BackColor = Color.DarkGray;
+                            SAE_servo_mid.BackColor = Color.IndianRed;
+                            SAE_servo_min.BackColor = Color.DarkGray;
+
+                            MakeDropLog();
+                        }
+                        else
+                        {
+                            CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
+                        }
                     else
-                    {
-                        CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
-                    }
+                        CustomMessageBox.Show("Vehicle is not connected!", Strings.ERROR);
                 }
                 catch (Exception ex)
                 {
@@ -870,21 +882,26 @@ namespace MissionPlanner.GCSViews
 
                 return true;
             }
-            else if (keyData == (Keys.Control | Keys.E))
+            else if (keyData == (Keys.Control | Keys.M))
             {
                 try
                 {
-                    if (MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO, Convert.ToInt32(SAE_drop_servo.Value), int.Parse(SAE_servo_min.Text), 0, 0,
+                    if (MainV2.comPort.BaseStream.IsOpen)
+                        if (MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO, Convert.ToInt32(SAE_drop_servo.Value), int.Parse(SAE_servo_min.Text), 0, 0,
                         0, 0, 0))
-                    {
-                        SAE_servo_max.BackColor = Color.DarkGray;
-                        SAE_servo_mid.BackColor = Color.DarkGray;
-                        SAE_servo_min.BackColor = Color.IndianRed;
-                    }
+                        {
+                            SAE_servo_max.BackColor = Color.DarkGray;
+                            SAE_servo_mid.BackColor = Color.DarkGray;
+                            SAE_servo_min.BackColor = Color.IndianRed;
+
+                            MakeDropLog();
+                        }
+                        else
+                        {
+                            CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
+                        }
                     else
-                    {
-                        CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
-                    }
+                        CustomMessageBox.Show("Vehicle is not connected!", Strings.ERROR);
                 }
                 catch (Exception ex)
                 {
@@ -895,6 +912,27 @@ namespace MissionPlanner.GCSViews
             }
 
             return false;
+        }
+
+        private void MakeDropLog()
+        {
+            string subfolder = LogDirectory + "\\DROP " + DateTime.Now.ToString("dd.MM.yyyy") + "_" + DateTime.Now.ToString("HH.mm.ss");
+
+            if (!Directory.Exists(subfolder))
+                Directory.CreateDirectory(subfolder);
+
+            int i = 1;
+            while (File.Exists(subfolder + @"\screenshot" + i.ToString() + ".png"))
+                i++;
+
+            hud1.GrabScreenshot().Save(subfolder + @"\screenshot" + i.ToString() + ".png", ImageFormat.Png);
+
+            var cs_dump = MainV2.comPort.MAV.cs.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach (var field in cs_dump)
+            {
+                File.AppendAllText(subfolder + @"\properties" + i.ToString() + ".log", field.Name + " = " + field.GetValue(MainV2.comPort.MAV.cs) + Environment.NewLine);
+            }
         }
 
         private void mainloop()
