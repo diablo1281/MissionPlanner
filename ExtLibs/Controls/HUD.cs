@@ -117,17 +117,14 @@ namespace MissionPlanner.Controls
         public bool displayvibe { get; set; }
 
         [System.ComponentModel.Browsable(true), DefaultValue(true)]
-        public bool crosshair { get; set; }
+        public bool crosshairon { get; set; }
 
         private static ImageCodecInfo ici = GetImageCodec("image/jpeg");
         private static EncoderParameters eps = new EncoderParameters(1);
 
         private bool started = false;
-       
-        public string crosshair_color { get; set; }
-        public int crosshair_width { get; set; }
-        public double crosshair_offset { get; set; }
-        public double crosshair_rect { get; set; }
+
+        public Crosshair crosshair;
 
         public HUD()
         {
@@ -142,7 +139,7 @@ namespace MissionPlanner.Controls
             opengl =
                 bgon =
                     hudon =
-                        crosshair = true;
+                        crosshairon = true;
 
             this.Name = "Hud";
 
@@ -153,6 +150,8 @@ namespace MissionPlanner.Controls
 
             graphicsObject = this;
             graphicsObjectGDIP = Graphics.FromImage(objBitmap);
+
+            crosshair = new Crosshair();
         }
 
         private float _roll = 0;
@@ -2272,10 +2271,11 @@ namespace MissionPlanner.Controls
                 }
 
                 //Display crosshair
-                if(crosshair)
+                if(crosshairon)
                 {
-                    var crosshair_pen = new Pen(Color.FromName(crosshair_color), crosshair_width);
-                    drawCrosshair(graphicsObject, crosshair_pen, this.Width / 2, this.Height / 3, crosshair_offset, crosshair_rect);
+                    double point_X = this.Width / 2;
+                    double point_Y = this.Height / 3;
+                    crosshair.Draw(graphicsObject);
                 }
 
                 if (!opengl)
@@ -2556,17 +2556,6 @@ namespace MissionPlanner.Controls
                 x += charDict[charid].width * scale;
             }
 
-        }
-
-        void drawCrosshair(HUD e, Pen _pen, double center_x, double center_y, double free_center_size, double rect_size)
-        {
-            double offset_x = free_center_size * this.Width * 0.5;
-            double offset_y = free_center_size * this.Height * 0.5;
-            e.DrawLine(_pen, center_x, 0, center_x, center_y - offset_y);
-            e.DrawLine(_pen, center_x, center_y + offset_y, center_x, this.Height);
-            e.DrawLine(_pen, 0, center_y, center_x - offset_x, center_y);
-            e.DrawLine(_pen, center_x + offset_x, center_y, this.Width, center_y);
-            e.DrawRectangle(_pen, center_x - (rect_size * offset_x), center_y - (rect_size * offset_y), 2 * rect_size * offset_x, 2 * rect_size * offset_y);
         }
 
         protected override void OnHandleCreated(EventArgs e)

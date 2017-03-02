@@ -41,7 +41,6 @@ namespace MissionPlanner
             logfile_name = DateTime.Now.ToString("dd.MM.yyyy") + "_" + DateTime.Now.ToString("HH.mm.ss") + ".log";
             restart_connection = false;
 
-
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\SAE Flight Logs\"))
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\SAE Flight Logs\");
         }

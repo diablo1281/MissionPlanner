@@ -101,7 +101,7 @@ namespace MissionPlanner.GCSViews
         double LogPlayBackSpeed = 1.0;
 
         GMapMarker marker;
-
+        
         AviWriter aviwriter;
 
         public SplitContainer MainHcopy;
@@ -333,16 +333,16 @@ namespace MissionPlanner.GCSViews
                     SAE_crosshair_color_box.Items.Add(prop.Name);
 
             SAE_crosshair_color_box.Text = System.Configuration.ConfigurationManager.AppSettings["CrosshairColor"];
-            hud1.crosshair_color = SAE_crosshair_color_box.Text;
+            hud1.crosshair.LineColor = SAE_crosshair_color_box.Text;
 
             SAE_crosshair_width.Value = int.Parse(System.Configuration.ConfigurationManager.AppSettings["CrosshairWidth"]);
-            hud1.crosshair_width = Convert.ToInt32(SAE_crosshair_width.Value);
+            hud1.crosshair.LineWidth = Convert.ToInt32(SAE_crosshair_width.Value);
 
             SAE_crosshair_center_offset.Value = decimal.Parse(System.Configuration.ConfigurationManager.AppSettings["CrosshairOffset"]);
-            hud1.crosshair_offset = Convert.ToDouble(SAE_crosshair_center_offset.Value);
+            hud1.crosshair.CenterOffset = Convert.ToDouble(SAE_crosshair_center_offset.Value);
 
             SAE_crosshair_rect.Value = decimal.Parse(System.Configuration.ConfigurationManager.AppSettings["CrosshairRect"]);
-            hud1.crosshair_rect = Convert.ToDouble(SAE_crosshair_rect.Value);
+            hud1.crosshair.RectSize = Convert.ToDouble(SAE_crosshair_rect.Value);
 
             SAE_drop_servo.Value = int.Parse(System.Configuration.ConfigurationManager.AppSettings["DropServo"]);
 
@@ -4579,7 +4579,7 @@ namespace MissionPlanner.GCSViews
 
         private void SAE_crosshair_color_box_SelectedIndexChanged(object sender, EventArgs e)
         {
-            hud1.crosshair_color = SAE_crosshair_color_box.Text;
+            hud1.crosshair.LineColor = SAE_crosshair_color_box.Text;
             var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
             config.AppSettings.Settings["CrosshairColor"].Value = SAE_crosshair_color_box.Text;
             config.Save();
@@ -4587,7 +4587,7 @@ namespace MissionPlanner.GCSViews
 
         private void SAE_crosshair_width_ValueChanged(object sender, EventArgs e)
         {
-            hud1.crosshair_width = Convert.ToInt32(SAE_crosshair_width.Value);
+            hud1.crosshair.LineWidth = Convert.ToInt32(SAE_crosshair_width.Value);
             var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
             config.AppSettings.Settings["CrosshairWidth"].Value = SAE_crosshair_width.Value.ToString();
             config.Save();
@@ -4595,7 +4595,7 @@ namespace MissionPlanner.GCSViews
 
         private void SAE_crosshair_center_offset_ValueChanged(object sender, EventArgs e)
         {
-            hud1.crosshair_offset = Convert.ToDouble(SAE_crosshair_center_offset.Value);
+            hud1.crosshair.CenterOffset = Convert.ToDouble(SAE_crosshair_center_offset.Value);
             var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
             config.AppSettings.Settings["CrosshairOffset"].Value = SAE_crosshair_center_offset.Value.ToString();
             config.Save();
@@ -4603,7 +4603,7 @@ namespace MissionPlanner.GCSViews
         
         private void SAE_crosshair_rect_ValueChanged(object sender, EventArgs e)
         {
-            hud1.crosshair_rect = Convert.ToDouble(SAE_crosshair_rect.Value);
+            hud1.crosshair.RectSize = Convert.ToDouble(SAE_crosshair_rect.Value);
             var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
             config.AppSettings.Settings["CrosshairRect"].Value = SAE_crosshair_rect.Value.ToString();
             config.Save();

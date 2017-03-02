@@ -78,6 +78,7 @@
     <Compile Include="Coords.Designer.cs">
       <DependentUpon>Coords.cs</DependentUpon>
     </Compile>
+    <Compile Include="Crosshair.cs" />
     <Compile Include="CustomMessageBox.cs" />
     <Compile Include="FileBrowse.cs">
       <SubType>UserControl</SubType>

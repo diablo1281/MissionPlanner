@@ -270,10 +270,6 @@
             this.hud1.bgimage = null;
             this.hud1.connected = false;
             this.hud1.ContextMenuStrip = this.contextMenuStripHud;
-            this.hud1.crosshair_color = null;
-            this.hud1.crosshair_offset = 0D;
-            this.hud1.crosshair_rect = 0D;
-            this.hud1.crosshair_width = 0;
             this.hud1.current = 0F;
             this.hud1.DataBindings.Add(new System.Windows.Forms.Binding("airspeed", this.bindingSourceHud, "airspeed", true));
             this.hud1.DataBindings.Add(new System.Windows.Forms.Binding("alt", this.bindingSourceHud, "alt", true));
