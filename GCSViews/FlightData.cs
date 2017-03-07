@@ -351,6 +351,21 @@ namespace MissionPlanner.GCSViews
             SAE_servo_max.Text = System.Configuration.ConfigurationManager.AppSettings["ServoClosed"];
             SAE_servo_mid.Text = System.Configuration.ConfigurationManager.AppSettings["ServoMid"];
             SAE_servo_min.Text = System.Configuration.ConfigurationManager.AppSettings["ServoOpened"];
+
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+
+            hud1.crosshair.Cd = double.Parse(config.AppSettings.Settings["PackageDrag"].Value);
+            hud1.crosshair.ro = double.Parse(config.AppSettings.Settings["PackageAir"].Value);
+            hud1.crosshair.m = double.Parse(config.AppSettings.Settings["PackageWeigth"].Value);
+            hud1.crosshair.S = double.Parse(config.AppSettings.Settings["PackageArea"].Value);
+
+            SAE_trimX_box.Value = decimal.Parse(config.AppSettings.Settings["CrosshairTrimX"].Value);
+            SAE_trimY_box.Value = decimal.Parse(config.AppSettings.Settings["CrosshairTrimY"].Value);
+            SAE_delay_box.Value = decimal.Parse(config.AppSettings.Settings["CrosshairDelay"].Value);
+
+            hud1.crosshair.TrimX = double.Parse(config.AppSettings.Settings["CrosshairTrimX"].Value);
+            hud1.crosshair.TrimY = double.Parse(config.AppSettings.Settings["CrosshairTrimY"].Value);
+            hud1.crosshair.Delay = double.Parse(config.AppSettings.Settings["CrosshairDelay"].Value);
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
@@ -4672,6 +4687,48 @@ namespace MissionPlanner.GCSViews
         {
             var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
             config.AppSettings.Settings["ServoOpened"].Value = SAE_servo_min.Text;
+            config.Save();
+        }
+
+        private void SAE_package_setting_button_Click(object sender, EventArgs e)
+        {
+            var form = new SAE_package_setting();
+            ThemeManager.ApplyThemeTo(form);
+
+            form.ShowDialog();
+
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+
+            hud1.crosshair.Cd = double.Parse(config.AppSettings.Settings["PackageDrag"].Value);
+            hud1.crosshair.ro = double.Parse(config.AppSettings.Settings["PackageAir"].Value);
+            hud1.crosshair.m = double.Parse(config.AppSettings.Settings["PackageWeigth"].Value);
+            hud1.crosshair.S = double.Parse(config.AppSettings.Settings["PackageArea"].Value);
+
+            if(MainV2.comPort.BaseStream.IsOpen && MainV2.comPort.MAV.cs.satcount > 6)
+                hud1.crosshair.CalculateG(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.alt);
+        }
+
+        private void SAE_delay_box_ValueChanged(object sender, EventArgs e)
+        {
+            hud1.crosshair.Delay = Convert.ToDouble(SAE_delay_box.Value);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["CrosshairDelay"].Value = SAE_delay_box.Value.ToString();
+            config.Save();
+        }
+
+        private void SAE_trimX_box_ValueChanged(object sender, EventArgs e)
+        {
+            hud1.crosshair.TrimX = Convert.ToDouble(SAE_trimX_box.Value);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["CrosshairTrimX"].Value = SAE_trimX_box.Value.ToString();
+            config.Save();
+        }
+
+        private void SAE_trimY_box_ValueChanged(object sender, EventArgs e)
+        {
+            hud1.crosshair.TrimY = Convert.ToDouble(SAE_trimY_box.Value);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
+            config.AppSettings.Settings["CrosshairTrimY"].Value = SAE_trimY_box.Value.ToString();
             config.Save();
         }
     }

@@ -121,6 +121,13 @@
             this.tabPagemessages = new System.Windows.Forms.TabPage();
             this.txt_messagebox = new System.Windows.Forms.TextBox();
             this.tabPageSAE = new System.Windows.Forms.TabPage();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.SAE_trimY_box = new System.Windows.Forms.NumericUpDown();
+            this.SAE_trimX_box = new System.Windows.Forms.NumericUpDown();
+            this.SAE_delay_box = new System.Windows.Forms.NumericUpDown();
+            this.label17 = new System.Windows.Forms.Label();
+            this.SAE_package_setting_button = new MissionPlanner.Controls.MyButton();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
@@ -213,6 +220,9 @@
             this.tabScripts.SuspendLayout();
             this.tabPagemessages.SuspendLayout();
             this.tabPageSAE.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_trimY_box)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_trimX_box)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_delay_box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SAE_drop_servo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SAE_crosshair_rect)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SAE_crosshair_center_offset)).BeginInit();
@@ -1794,6 +1804,13 @@
             // 
             // tabPageSAE
             // 
+            this.tabPageSAE.Controls.Add(this.label19);
+            this.tabPageSAE.Controls.Add(this.label18);
+            this.tabPageSAE.Controls.Add(this.SAE_trimY_box);
+            this.tabPageSAE.Controls.Add(this.SAE_trimX_box);
+            this.tabPageSAE.Controls.Add(this.SAE_delay_box);
+            this.tabPageSAE.Controls.Add(this.label17);
+            this.tabPageSAE.Controls.Add(this.SAE_package_setting_button);
             this.tabPageSAE.Controls.Add(this.label16);
             this.tabPageSAE.Controls.Add(this.label15);
             this.tabPageSAE.Controls.Add(this.label14);
@@ -1815,6 +1832,84 @@
             resources.ApplyResources(this.tabPageSAE, "tabPageSAE");
             this.tabPageSAE.Name = "tabPageSAE";
             this.tabPageSAE.UseVisualStyleBackColor = true;
+            // 
+            // label19
+            // 
+            resources.ApplyResources(this.label19, "label19");
+            this.label19.Name = "label19";
+            // 
+            // label18
+            // 
+            resources.ApplyResources(this.label18, "label18");
+            this.label18.Name = "label18";
+            // 
+            // SAE_trimY_box
+            // 
+            this.SAE_trimY_box.DecimalPlaces = 2;
+            this.SAE_trimY_box.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            resources.ApplyResources(this.SAE_trimY_box, "SAE_trimY_box");
+            this.SAE_trimY_box.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.SAE_trimY_box.Name = "SAE_trimY_box";
+            this.SAE_trimY_box.ValueChanged += new System.EventHandler(this.SAE_trimY_box_ValueChanged);
+            // 
+            // SAE_trimX_box
+            // 
+            this.SAE_trimX_box.DecimalPlaces = 2;
+            this.SAE_trimX_box.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            resources.ApplyResources(this.SAE_trimX_box, "SAE_trimX_box");
+            this.SAE_trimX_box.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.SAE_trimX_box.Name = "SAE_trimX_box";
+            this.SAE_trimX_box.ValueChanged += new System.EventHandler(this.SAE_trimX_box_ValueChanged);
+            // 
+            // SAE_delay_box
+            // 
+            this.SAE_delay_box.DecimalPlaces = 2;
+            this.SAE_delay_box.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            resources.ApplyResources(this.SAE_delay_box, "SAE_delay_box");
+            this.SAE_delay_box.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.SAE_delay_box.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            -2147483648});
+            this.SAE_delay_box.Name = "SAE_delay_box";
+            this.SAE_delay_box.ValueChanged += new System.EventHandler(this.SAE_delay_box_ValueChanged);
+            // 
+            // label17
+            // 
+            resources.ApplyResources(this.label17, "label17");
+            this.label17.Name = "label17";
+            // 
+            // SAE_package_setting_button
+            // 
+            resources.ApplyResources(this.SAE_package_setting_button, "SAE_package_setting_button");
+            this.SAE_package_setting_button.Name = "SAE_package_setting_button";
+            this.SAE_package_setting_button.UseVisualStyleBackColor = true;
+            this.SAE_package_setting_button.Click += new System.EventHandler(this.SAE_package_setting_button_Click);
             // 
             // label16
             // 
@@ -2146,7 +2241,7 @@
             this.windDir1.BackColor = System.Drawing.Color.Transparent;
             this.windDir1.DataBindings.Add(new System.Windows.Forms.Binding("Direction", this.bindingSource1, "wind_dir", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.windDir1.DataBindings.Add(new System.Windows.Forms.Binding("Speed", this.bindingSource1, "wind_vel", true, System.Windows.Forms.DataSourceUpdateMode.Never));
-            this.windDir1.Direction = 180D;
+            this.windDir1.Direction = 360D;
             resources.ApplyResources(this.windDir1, "windDir1");
             this.windDir1.Name = "windDir1";
             this.windDir1.Speed = 0D;
@@ -2409,6 +2504,9 @@
             this.tabPagemessages.PerformLayout();
             this.tabPageSAE.ResumeLayout(false);
             this.tabPageSAE.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_trimY_box)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_trimX_box)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAE_delay_box)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SAE_drop_servo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SAE_crosshair_rect)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SAE_crosshair_center_offset)).EndInit();
@@ -2607,5 +2705,12 @@
         private System.Windows.Forms.TextBox SAE_servo_min;
         private System.Windows.Forms.TextBox SAE_servo_mid;
         private System.Windows.Forms.TextBox SAE_servo_max;
+        private Controls.MyButton SAE_package_setting_button;
+        private System.Windows.Forms.NumericUpDown SAE_delay_box;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.NumericUpDown SAE_trimY_box;
+        private System.Windows.Forms.NumericUpDown SAE_trimX_box;
     }
 }

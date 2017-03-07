@@ -20,14 +20,17 @@ namespace MissionPlanner.Controls
         public double pointX { get; set; }
         public double pointY { get; set; }
 
-        private double Cd = 0.45;
-        private double ro = 1.2;
-        private double S = 0.0085;
-        private double m = 1.361;
+        public double TrimX { get; set; }
+        public double TrimY { get; set; }
+
+        public double Cd = 0.45;
+        public double ro = 1.2;
+        public double S = 0.0085;
+        public double m = 1.361;
         private double chi = -1;
         private double g = 9.8172;
-        //private double g = g = 9.780318 * (1 + 0.0053024 * (sin(lat) ^ 2) - 0.0000058 * (sin(lat) ^ 2)) - (3.086 * 10 ^ -6 * alt);
         private double k;
+
         public Crosshair()
         {
             LineColor = "Red";
@@ -36,10 +39,14 @@ namespace MissionPlanner.Controls
             RectSize = 2;
 
             pointX = pointY = 0;
-
+            TrimX = TrimY = 0;
             Delay = 0;
         }
 
+        public void CalculateG(double lat, double alt)
+        {
+            g = 9.780318 * (1 + 0.0053024 * Math.Pow(Math.Sin(lat), 2) - 0.0000058 * Math.Pow(Math.Sin(lat), 2) - (3.086 * Math.Pow(10, -6) * alt));
+        }
         public void Draw(HUD e)
         {
             CalculateDistance(e);
@@ -85,7 +92,7 @@ namespace MissionPlanner.Controls
                 }
             }
 
-            Angle = Math.Atan(e.alt / Distance) * (180 / Math.PI);
+            Angle = Math.Atan(e.alt / (Distance - TrimX + (Delay * (e.airspeed - e.groundspeed)))) * (180 / Math.PI);
         }
     
     }
