@@ -58,8 +58,6 @@ namespace MissionPlanner.Controls
 
             var pen = new Pen(Color.FromName(LineColor), LineWidth);
 
-            pointX = (((CameraAngle - Angle) / angle_view_X) * e.Height) + (e.Height / 2);
-            pointY = ((((Math.Atan(TrimY / e.alt) * (180 / Math.PI)) / angle_view_Y) * e.Width) * (TrimY / TrimY)) + (e.Width / 2);
             double offset_x = CenterOffset * e.Width * 0.5;
             double offset_y = CenterOffset * e.Height * 0.5;
             e.DrawLine(pen, pointX, 0, pointX, pointY - offset_y);
@@ -101,6 +99,9 @@ namespace MissionPlanner.Controls
             }
 
             Angle = Math.Atan(e.alt / (Distance - TrimX + (Delay * (e.airspeed - e.groundspeed)))) * (180 / Math.PI);
+
+            pointX = (((CameraAngle - Angle) / angle_view_X) * e.Height) + (e.Height / 2);
+            pointY = ((((Math.Atan(TrimY / e.alt) * (180 / Math.PI)) / angle_view_Y) * e.Width) * (TrimY / TrimY)) + (e.Width / 2);
         }
     
     }
