@@ -38,6 +38,46 @@ namespace MissionPlanner.GCSViews
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        private System.Timers.Timer crosshair_timer;
+        private bool custom_camera_angle = false;
+        private double angmin_0 = -60;
+
+        public void InitCrosshairTimer()
+        {
+            crosshair_timer = new System.Timers.Timer();
+            crosshair_timer.Elapsed += new System.Timers.ElapsedEventHandler(crosshairTimer_Tick);
+            crosshair_timer.Interval = 100;
+            crosshair_timer.Start();
+        }
+
+        private void crosshairTimer_Tick(object sender, EventArgs e)
+        {
+            if (MainV2.comPort.BaseStream.IsOpen && custom_camera_angle == false && hud1.crosshair.Angle != -666)
+            {
+                double current_tilt_angle = (MainV2.comPort.GetParam("MNT_ANGMIN_TIL") / 100) + angmin_0;
+                //double tilt_min = (angmin_0 + hud1.crosshair.Angle) * 100;
+                if (hud1.crosshair.Angle > (current_tilt_angle - 20) || hud1.crosshair.Angle < (current_tilt_angle + 20))
+                {
+                    double tilt_min = (hud1.crosshair.Angle + angmin_0) * 100;
+                    double tilt_max = tilt_min + 9000;
+
+                    MainV2.comPort.setParam("MNT_ANGMIN_TIL", tilt_min);
+                    MainV2.comPort.setParam("MNT_ANGMAX_TIL", tilt_max);
+                    hud1.crosshair.CameraAngle = hud1.crosshair.Angle;
+                }
+                MainV2.comPort.setParam("MNT_ANGMIN_ROL", -9000);
+                MainV2.comPort.setParam("MNT_ANGMAX_ROL", 9000);
+            }
+            else if (custom_camera_angle == false)
+            {
+                MainV2.comPort.setParam("MNT_ANGMIN_TIL", -6000);
+                MainV2.comPort.setParam("MNT_ANGMAX_TIL", 3000);
+                MainV2.comPort.setParam("MNT_ANGMIN_ROL", -9000);
+                MainV2.comPort.setParam("MNT_ANGMAX_ROL", 9000);
+                hud1.crosshair.CameraAngle = 0;
+            }
+        }
+
         public static bool threadrun;
         int tickStart;
         RollingPointPairList list1 = new RollingPointPairList(1200);
@@ -366,6 +406,8 @@ namespace MissionPlanner.GCSViews
             hud1.crosshair.TrimX = double.Parse(config.AppSettings.Settings["CrosshairTrimX"].Value);
             hud1.crosshair.TrimY = double.Parse(config.AppSettings.Settings["CrosshairTrimY"].Value);
             hud1.crosshair.Delay = double.Parse(config.AppSettings.Settings["CrosshairDelay"].Value);
+
+            InitCrosshairTimer();
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
@@ -882,6 +924,7 @@ namespace MissionPlanner.GCSViews
                             SAE_servo_min.BackColor = Color.DarkGray;
 
                             MakeDropLog();
+                            SAE_message_box.Text = DateTime.Now.ToString() + ": First payload drop done at altitude: " + MainV2.comPort.MAV.cs.alt.ToString() + Environment.NewLine + SAE_message_box.Text;
                         }
                         else
                         {
@@ -910,6 +953,8 @@ namespace MissionPlanner.GCSViews
                             SAE_servo_min.BackColor = Color.IndianRed;
 
                             MakeDropLog();
+
+                            SAE_message_box.Text = DateTime.Now.ToString() + ": Second payload drop done at altitude: " + MainV2.comPort.MAV.cs.alt.ToString() + Environment.NewLine + SAE_message_box.Text;
                         }
                         else
                         {
@@ -924,6 +969,48 @@ namespace MissionPlanner.GCSViews
                 }
 
                 return true;
+            }
+            else if (keyData == (Keys.Control | Keys.Up))
+            {
+                if (MainV2.comPort.BaseStream.IsOpen)
+                {
+                    MainV2.comPort.setParam("MNT_ANGMIN_TIL", MainV2.comPort.GetParam("MNT_ANGMIN_TIL") - 100);
+                    MainV2.comPort.setParam("MNT_ANGMAX_TIL", MainV2.comPort.GetParam("MNT_ANGMAX_TIL") - 100);
+                    hud1.crosshair.CameraAngle = (MainV2.comPort.GetParam("MNT_ANGMIN_TIL") / 100) - angmin_0;
+                    custom_camera_angle = true;
+                }
+            }
+            else if (keyData == (Keys.Control | Keys.Down))
+            {
+                if (MainV2.comPort.BaseStream.IsOpen)
+                {
+                    MainV2.comPort.setParam("MNT_ANGMIN_TIL", MainV2.comPort.GetParam("MNT_ANGMIN_TIL") + 100);
+                    MainV2.comPort.setParam("MNT_ANGMAX_TIL", MainV2.comPort.GetParam("MNT_ANGMAX_TIL") + 100);
+                    hud1.crosshair.CameraAngle = (MainV2.comPort.GetParam("MNT_ANGMIN_TIL") / 100) - angmin_0;
+                    custom_camera_angle = true;
+                }
+            }
+            else if (keyData == (Keys.Control | Keys.Left))
+            {
+                if (MainV2.comPort.BaseStream.IsOpen)
+                {
+                    MainV2.comPort.setParam("MNT_ANGMIN_ROL", MainV2.comPort.GetParam("MNT_ANGMIN_ROL") - 100);
+                    MainV2.comPort.setParam("MNT_ANGMAX_ROL", MainV2.comPort.GetParam("MNT_ANGMAX_ROL") - 100);
+                    custom_camera_angle = true;
+                }
+            }
+            else if (keyData == (Keys.Control | Keys.Right))
+            {
+                if (MainV2.comPort.BaseStream.IsOpen)
+                {
+                    MainV2.comPort.setParam("MNT_ANGMIN_ROL", MainV2.comPort.GetParam("MNT_ANGMIN_ROL") + 100);
+                    MainV2.comPort.setParam("MNT_ANGMAX_ROL", MainV2.comPort.GetParam("MNT_ANGMAX_ROL") + 100);
+                    custom_camera_angle = true;
+                }
+            }
+            else if (keyData == (Keys.Control | Keys.Space))
+            {
+                custom_camera_angle = false;
             }
 
             return false;
@@ -4730,6 +4817,11 @@ namespace MissionPlanner.GCSViews
             var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
             config.AppSettings.Settings["CrosshairTrimY"].Value = SAE_trimY_box.Value.ToString();
             config.Save();
+        }
+
+        private void SAE_message_clear_button_Click(object sender, EventArgs e)
+        {
+            SAE_message_box.Text = "";
         }
     }
 }

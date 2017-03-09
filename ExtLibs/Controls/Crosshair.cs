@@ -16,9 +16,13 @@ namespace MissionPlanner.Controls
         public double Delay { get; set; }
         public double Distance { get; set; }
         public double Angle { get; set; }
+        public double CameraAngle { get; set; }
 
         public double pointX { get; set; }
         public double pointY { get; set; }
+
+        private double angle_view_X = 54;
+        private double angle_view_Y = 96;
 
         public double TrimX { get; set; }
         public double TrimY { get; set; }
@@ -41,6 +45,7 @@ namespace MissionPlanner.Controls
             pointX = pointY = 0;
             TrimX = TrimY = 0;
             Delay = 0;
+            CameraAngle = 0;
         }
 
         public void CalculateG(double lat, double alt)
@@ -53,6 +58,8 @@ namespace MissionPlanner.Controls
 
             var pen = new Pen(Color.FromName(LineColor), LineWidth);
 
+            pointX = (((CameraAngle - Angle) / angle_view_X) * e.Height) + (e.Height / 2);
+            pointY = ((((Math.Atan(TrimY / e.alt) * (180 / Math.PI)) / angle_view_Y) * e.Width) * (TrimY / TrimY)) + (e.Width / 2);
             double offset_x = CenterOffset * e.Width * 0.5;
             double offset_y = CenterOffset * e.Height * 0.5;
             e.DrawLine(pen, pointX, 0, pointX, pointY - offset_y);
@@ -68,6 +75,7 @@ namespace MissionPlanner.Controls
             {
                 pointX = e.Width / 2;
                 pointY = e.Height / 2;
+                Angle = -666;
                 return;
             }
 

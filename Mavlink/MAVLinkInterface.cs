@@ -546,7 +546,7 @@ Please check the following
                 if (string.IsNullOrEmpty(progressWorkerEventArgs.ErrorMessage))
                     progressWorkerEventArgs.ErrorMessage = Strings.ConnectFailed;
                 log.Error(e);
-                throw;
+                //throw;
             }
             //frmProgressReporter.Close();
             giveComport = false;

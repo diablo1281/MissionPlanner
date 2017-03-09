@@ -2273,8 +2273,6 @@ namespace MissionPlanner.Controls
                 //Display crosshair
                 if(crosshairon)
                 {
-                    double point_X = this.Width / 2;
-                    double point_Y = this.Height / 3;
                     crosshair.Draw(graphicsObject);
                 }
 
