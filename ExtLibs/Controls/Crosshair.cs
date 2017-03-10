@@ -30,7 +30,7 @@ namespace MissionPlanner.Controls
         public double Cd = 0.45;
         public double ro = 1.2;
         public double S = 0.0085;
-        public double m = 1.361;
+        public double m = 0.983;
         private double chi = -1;
         private double g = 9.8172;
         private double k;
@@ -101,7 +101,9 @@ namespace MissionPlanner.Controls
             Angle = Math.Atan(e.alt / (Distance - TrimX + (Delay * (e.airspeed - e.groundspeed)))) * (180 / Math.PI);
 
             pointX = (((CameraAngle - Angle) / angle_view_X) * e.Height) + (e.Height / 2);
-            pointY = ((((Math.Atan(TrimY / e.alt) * (180 / Math.PI)) / angle_view_Y) * e.Width) * (TrimY / TrimY)) + (e.Width / 2);
+            //pointX = e.Height / 2;
+            pointY = e.Width / 2;
+            //pointY = ((((Math.Atan(TrimY / e.alt) * (180 / Math.PI)) / angle_view_Y) * e.Width) * (TrimY / TrimY)) + (e.Width / 2);
         }
     
     }

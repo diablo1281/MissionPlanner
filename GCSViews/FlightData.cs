@@ -41,12 +41,12 @@ namespace MissionPlanner.GCSViews
         private System.Timers.Timer crosshair_timer;
         private bool custom_camera_angle = false;
         private double angmin_0 = -60;
-
+        private double camera_move_value = 500;
         public void InitCrosshairTimer()
         {
             crosshair_timer = new System.Timers.Timer();
             crosshair_timer.Elapsed += new System.Timers.ElapsedEventHandler(crosshairTimer_Tick);
-            crosshair_timer.Interval = 100;
+            crosshair_timer.Interval = 1000;
             crosshair_timer.Start();
         }
 
@@ -974,8 +974,8 @@ namespace MissionPlanner.GCSViews
             {
                 if (MainV2.comPort.BaseStream.IsOpen)
                 {
-                    MainV2.comPort.setParam("MNT_ANGMIN_TIL", MainV2.comPort.GetParam("MNT_ANGMIN_TIL") - 100);
-                    MainV2.comPort.setParam("MNT_ANGMAX_TIL", MainV2.comPort.GetParam("MNT_ANGMAX_TIL") - 100);
+                    MainV2.comPort.setParam("MNT_ANGMIN_TIL", MainV2.comPort.GetParam("MNT_ANGMIN_TIL") - camera_move_value);
+                    MainV2.comPort.setParam("MNT_ANGMAX_TIL", MainV2.comPort.GetParam("MNT_ANGMAX_TIL") - camera_move_value);
                     hud1.crosshair.CameraAngle = (MainV2.comPort.GetParam("MNT_ANGMIN_TIL") / 100) - angmin_0;
                     custom_camera_angle = true;
                 }
@@ -984,8 +984,8 @@ namespace MissionPlanner.GCSViews
             {
                 if (MainV2.comPort.BaseStream.IsOpen)
                 {
-                    MainV2.comPort.setParam("MNT_ANGMIN_TIL", MainV2.comPort.GetParam("MNT_ANGMIN_TIL") + 100);
-                    MainV2.comPort.setParam("MNT_ANGMAX_TIL", MainV2.comPort.GetParam("MNT_ANGMAX_TIL") + 100);
+                    MainV2.comPort.setParam("MNT_ANGMIN_TIL", MainV2.comPort.GetParam("MNT_ANGMIN_TIL") + camera_move_value);
+                    MainV2.comPort.setParam("MNT_ANGMAX_TIL", MainV2.comPort.GetParam("MNT_ANGMAX_TIL") + camera_move_value);
                     hud1.crosshair.CameraAngle = (MainV2.comPort.GetParam("MNT_ANGMIN_TIL") / 100) - angmin_0;
                     custom_camera_angle = true;
                 }
@@ -994,8 +994,8 @@ namespace MissionPlanner.GCSViews
             {
                 if (MainV2.comPort.BaseStream.IsOpen)
                 {
-                    MainV2.comPort.setParam("MNT_ANGMIN_ROL", MainV2.comPort.GetParam("MNT_ANGMIN_ROL") - 100);
-                    MainV2.comPort.setParam("MNT_ANGMAX_ROL", MainV2.comPort.GetParam("MNT_ANGMAX_ROL") - 100);
+                    MainV2.comPort.setParam("MNT_ANGMIN_ROL", MainV2.comPort.GetParam("MNT_ANGMIN_ROL") - camera_move_value);
+                    MainV2.comPort.setParam("MNT_ANGMAX_ROL", MainV2.comPort.GetParam("MNT_ANGMAX_ROL") - camera_move_value);
                     custom_camera_angle = true;
                 }
             }
@@ -1003,8 +1003,8 @@ namespace MissionPlanner.GCSViews
             {
                 if (MainV2.comPort.BaseStream.IsOpen)
                 {
-                    MainV2.comPort.setParam("MNT_ANGMIN_ROL", MainV2.comPort.GetParam("MNT_ANGMIN_ROL") + 100);
-                    MainV2.comPort.setParam("MNT_ANGMAX_ROL", MainV2.comPort.GetParam("MNT_ANGMAX_ROL") + 100);
+                    MainV2.comPort.setParam("MNT_ANGMIN_ROL", MainV2.comPort.GetParam("MNT_ANGMIN_ROL") + camera_move_value);
+                    MainV2.comPort.setParam("MNT_ANGMAX_ROL", MainV2.comPort.GetParam("MNT_ANGMAX_ROL") + camera_move_value);
                     custom_camera_angle = true;
                 }
             }
